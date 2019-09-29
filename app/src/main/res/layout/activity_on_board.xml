@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.OnBoardActivity">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/onboard_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.rd.PageIndicatorView
+        android:id="@+id/pageIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:layout_centerHorizontal="true"
+        app:piv_animationType="scale"
+        app:piv_dynamicCount="true"
+        app:piv_interactiveAnimation="true"
+        app:piv_selectedColor="#673AB7"
+        app:piv_unselectedColor="#DCDCDC"
+        app:piv_viewPager="@id/onboard_viewpager"
+        />
+    <Button
+        android:id="@+id/next_button_onboard"
+        android:layout_width="match_parent"
+        android:layout_margin="40dp"
+        android:layout_above="@id/pageIndicatorView"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:text="Далее"
+        android:background="#673AB7"/>
+    <Button
+        android:id="@+id/skip_button_onboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="Пропустить"
+        android:padding="20dp"
+        android:textColor="#673AB7"
+        android:background="#00FFFFFF"/>
+
+</RelativeLayout>
