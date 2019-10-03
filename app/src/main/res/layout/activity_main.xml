@@ -1,18 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.main.MainActivity">
+
+    <ImageView
+        android:id="@+id/main_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_weather_day"
+        android:scaleType="centerCrop"/>
+    <TextView
+        style="@style/WeatherTexts"
+        android:id="@+id/temp_celsius"
+        android:textSize="100sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        android:id="@+id/weather_text"
+        style="@style/WeatherTexts"
+        android:textSize="100sp"
+        android:text="°"
+        android:visibility="visible"
+        android:layout_toRightOf="@id/temp_celsius"
+        android:layout_marginTop="40dp"/>
+    <TextView
+        style="@style/WeatherTexts"
+        android:id="@+id/main_type"
+        android:textSize="40sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/temp_celsius"/>
+    <EditText
+        style="@style/WeatherTexts"
+        android:id="@+id/city_edit_text"
+        android:text="Bishkek"
+        android:hint="City"
+        android:padding="8dp"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/main_type" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/cloudAnim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="cloud.json"
+        app:lottie_loop="true" />
+
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
     <TextView
+        android:id="@+id/refresh_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_refresh"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/loadingView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnim"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true"
+            app:lottie_speed="3"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="loading..."/>
+    </LinearLayout>
+
+</RelativeLayout>

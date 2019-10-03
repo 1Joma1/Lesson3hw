@@ -1,21 +1,16 @@
-package com.geektech.androidthree.ui;
+package com.geektech.androidthree.ui.onBoard;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.geektech.androidthree.R;
+import com.geektech.androidthree.ui.main.MainActivity;
 import com.rd.PageIndicatorView;
 
 public class OnBoardActivity extends AppCompatActivity {
@@ -42,7 +37,7 @@ public class OnBoardActivity extends AppCompatActivity {
         pageIndicatorView.setSelection(2);
 
         viewPager = findViewById(R.id.onboard_viewpager);
-        viewPager.setAdapter(new onBoardAdapter(this));
+        viewPager.setAdapter(new onBoardAdapter());
 
         viewPagerListener();
         buttonClickListener();
@@ -55,12 +50,16 @@ public class OnBoardActivity extends AppCompatActivity {
                 if (viewPager.getCurrentItem() < 3) {
                     int i = viewPager.getCurrentItem();
                     viewPager.setCurrentItem(++i);
-                } else finish();
+                } else {
+                    MainActivity.start(OnBoardActivity.this);
+                    finish();
+                }
             }
         });
         skipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MainActivity.start(OnBoardActivity.this);
                 finish();
             }
         });
@@ -90,58 +89,5 @@ public class OnBoardActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    public class onBoardAdapter extends PagerAdapter {
-
-        private Context context;
-
-        public onBoardAdapter(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return 4;
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_viewpager_onboard, collection, false);
-            ImageView onBoardImage = layout.findViewById(R.id.onboard_imageview);
-            TextView onBoardText = layout.findViewById(R.id.onboard_textview);
-            switch (position) {
-                case 0:
-                    onBoardImage.setImageDrawable(getResources().getDrawable(R.drawable.on_board1));
-                    onBoardText.setText("В данном приложении вы можете учиться))");
-                    break;
-                case 1:
-                    onBoardImage.setImageDrawable(getResources().getDrawable(R.drawable.on_board2));
-                    onBoardText.setText("В данном приложении вы можете обновлять))");
-                    break;
-                case 2:
-                    onBoardImage.setImageDrawable(getResources().getDrawable(R.drawable.on_board3));
-                    onBoardText.setText("В данном приложении вы можете удалять");
-                    break;
-                case 3:
-                    onBoardImage.setImageDrawable(getResources().getDrawable(R.drawable.on_board4));
-                    onBoardText.setText("Спасибо что вы с нами))");
-                    break;
-            }
-            collection.addView(layout);
-            return layout;
-
-        }
     }
 }

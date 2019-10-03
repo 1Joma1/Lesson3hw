@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.geektech.androidthree.data.SharedPreferenceHelper;
 
+
 public class App extends Application {
 
     private static SharedPreferenceHelper preferenceHelper;

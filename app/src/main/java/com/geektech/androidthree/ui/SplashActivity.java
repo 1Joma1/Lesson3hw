@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.geektech.androidthree.App;
+import com.geektech.androidthree.ui.main.MainActivity;
+import com.geektech.androidthree.ui.onBoard.OnBoardActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -19,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void checkIsFirstLaunch(){
         if (App.getPreferenceHelper().isFirstLaunch()){
-            //App.getPreferenceHelper().setIsFirstLaunch();
+            App.getPreferenceHelper().setIsFirstLaunch();
             OnBoardActivity.start(this);
 
         } else {
