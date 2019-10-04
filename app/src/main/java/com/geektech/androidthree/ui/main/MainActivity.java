@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView weatherText;
     private TextView refreshButton;
     private View loadingView;
-    private ImageView iconView;
     private ImageView mainImage;
+    private ImageView iconView;
     private TextView mainSkyType;
     private EditText cityName;
     private String searchCity = "Bishkek";
@@ -49,18 +49,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findAllViewById();
-        getCurrentWeather(searchCity);
+        getWeatherByCity(searchCity);
         onClicks();
         changeBackgroundByTime();
     }
 
-    private void getCurrentWeather(String city) {
+    private void getWeatherByCity(String city) {
         RetrofitBuilder.getService().getWeatherByCity(city, "metric", getResources().getString(R.string.api_key))
                 .enqueue(new Callback<CurrentWeatherModel>() {
                     @Override
                     public void onResponse(@Nullable Call<CurrentWeatherModel> call, @Nullable Response<CurrentWeatherModel> response) {
                         if (response != null && response.isSuccessful() && response.body() != null) {
-                            String icon = "http://openweathermap.org/img/wn/"+response.body().getWeather().get(0).getIcon()+"@2x.png";
+                            String icon = "http://openweathermap.org/img/wn/" + response.body().getWeather().get(0).getIcon() + "@2x.png";
                             Glide.with(MainActivity.this).load(icon).into(iconView);
                             temp.setText(String.valueOf(response.body().getMain().getTemp().intValue()));
                             weatherText.setVisibility(View.VISIBLE);
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findAllViewById() {
+        iconView = findViewById(R.id.iconView);
         cityName = findViewById(R.id.city_edit_text);
         mainSkyType = findViewById(R.id.main_type);
         mainImage = findViewById(R.id.main_bg);
@@ -85,20 +86,19 @@ public class MainActivity extends AppCompatActivity {
         refreshButton = findViewById(R.id.refresh_button);
         temp = findViewById(R.id.temp_celsius);
         weatherText = findViewById(R.id.weather_text);
-        iconView = findViewById(R.id.weather_icon);
     }
 
     private int getHour() {
         return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     }
 
-    private void onClicks(){
+    private void onClicks() {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 refreshButton.setVisibility(View.GONE);
                 loadingView.setVisibility(View.VISIBLE);
-                getCurrentWeather(searchCity);
+                getWeatherByCity(searchCity);
             }
         });
 
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchCity = charSequence.toString();
-                getCurrentWeather(searchCity);
+                getWeatherByCity(searchCity);
             }
 
             @Override
@@ -119,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void changeBackgroundByTime(){
-        if (getHour() > 18 || getHour() < 7){
+
+    private void changeBackgroundByTime() {
+        if (getHour() > 18 || getHour() < 7) {
             mainImage.setImageDrawable(getResources().getDrawable(R.drawable.bg_weather_night));
         } else {
             mainImage.setImageDrawable(getResources().getDrawable(R.drawable.bg_weather_day));
