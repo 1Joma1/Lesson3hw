@@ -12,7 +12,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.geektech.androidthree.R;
 
-public class onBoardAdapter extends PagerAdapter {
+public class OnBoardAdapter extends PagerAdapter {
 
     private Context context;
 

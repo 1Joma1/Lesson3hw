@@ -1,43 +1,35 @@
 package com.geektech.androidthree.ui.main;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.geektech.androidthree.R;
-import com.geektech.androidthree.data.current_weather.CurrentWeatherModel;
-import com.geektech.androidthree.data.network.RetrofitBuilder;
+import com.geektech.androidthree.ui.base.BaseActivity;
+import com.geektech.androidthree.ui.map.MapFragment;
+import com.geektech.androidthree.ui.weather.WeatherFragment;
+import com.geektech.androidthree.utils.ToastUtils;
 
-import org.jetbrains.annotations.Nullable;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-import java.util.Calendar;
+public class MainActivity extends BaseActivity {
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+    @BindView(R.id.go_to_map_click_view)
+    TextView nextClick;
 
-public class MainActivity extends AppCompatActivity {
-
-    private TextView temp;
-    private TextView weatherText;
-    private TextView refreshButton;
-    private View loadingView;
-    private ImageView mainImage;
-    private ImageView iconView;
-    private TextView mainSkyType;
-    private EditText cityName;
-    private String searchCity = "Bishkek";
+    Fragment fragment;
+    WeatherFragment weatherFragment = new WeatherFragment();
+    MapFragment mapFragment = new MapFragment();
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
@@ -46,85 +38,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        findAllViewById();
-        getWeatherByCity(searchCity);
-        onClicks();
-        changeBackgroundByTime();
+        fragment = weatherFragment;
+        setFragment();
     }
 
-    private void getWeatherByCity(String city) {
-        RetrofitBuilder.getService().getWeatherByCity(city, "metric", getResources().getString(R.string.api_key))
-                .enqueue(new Callback<CurrentWeatherModel>() {
-                    @Override
-                    public void onResponse(@Nullable Call<CurrentWeatherModel> call, @Nullable Response<CurrentWeatherModel> response) {
-                        if (response != null && response.isSuccessful() && response.body() != null) {
-                            String icon = "http://openweathermap.org/img/wn/" + response.body().getWeather().get(0).getIcon() + "@2x.png";
-                            Glide.with(MainActivity.this).load(icon).into(iconView);
-                            temp.setText(String.valueOf(response.body().getMain().getTemp().intValue()));
-                            weatherText.setVisibility(View.VISIBLE);
-                            mainSkyType.setText(response.body().getWeather().get(0).getMain());
-                            refreshButton.setVisibility(View.VISIBLE);
-                            loadingView.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@Nullable Call<CurrentWeatherModel> call, @Nullable Throwable t) {
-                        if (t != null) Log.e("getCurrentWeather", t.getMessage());
-                    }
-                });
+    private void setFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_view_pager, fragment).commit();
     }
 
-    private void findAllViewById() {
-        iconView = findViewById(R.id.iconView);
-        cityName = findViewById(R.id.city_edit_text);
-        mainSkyType = findViewById(R.id.main_type);
-        mainImage = findViewById(R.id.main_bg);
-        loadingView = findViewById(R.id.loadingView);
-        refreshButton = findViewById(R.id.refresh_button);
-        temp = findViewById(R.id.temp_celsius);
-        weatherText = findViewById(R.id.weather_text);
+    @Override
+    protected Integer getResId() {
+        return R.layout.activity_main;
     }
 
-    private int getHour() {
-        return Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-    }
-
-    private void onClicks() {
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshButton.setVisibility(View.GONE);
-                loadingView.setVisibility(View.VISIBLE);
-                getWeatherByCity(searchCity);
-            }
-        });
-
-        cityName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchCity = charSequence.toString();
-                getWeatherByCity(searchCity);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                cityName.clearFocus();
-            }
-        });
-    }
-
-    private void changeBackgroundByTime() {
-        if (getHour() > 18 || getHour() < 7) {
-            mainImage.setImageDrawable(getResources().getDrawable(R.drawable.bg_weather_night));
+    @OnClick(R.id.go_to_map_click_view)
+    public void goToMapClick() {
+        if (nextClick.getText().equals("Map")) {
+            fragment = mapFragment;
+            setFragment();
+            nextClick.setText("Weather");
+            nextClick.setTextColor(getResources().getColor(R.color.black));
+            nextClick.setBackgroundColor(getResources().getColor(R.color.transparent_white));
         } else {
-            mainImage.setImageDrawable(getResources().getDrawable(R.drawable.bg_weather_day));
+            fragment = weatherFragment;
+            setFragment();
+            nextClick.setText("Map");
+            nextClick.setTextColor(getResources().getColor(R.color.white));
+            nextClick.setBackgroundColor(getResources().getColor(R.color.transparent_black));
         }
     }
 }

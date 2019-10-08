@@ -37,7 +37,7 @@ public class OnBoardActivity extends AppCompatActivity {
         pageIndicatorView.setSelection(2);
 
         viewPager = findViewById(R.id.onboard_viewpager);
-        viewPager.setAdapter(new onBoardAdapter());
+        viewPager.setAdapter(new OnBoardAdapter());
 
         viewPagerListener();
         buttonClickListener();
